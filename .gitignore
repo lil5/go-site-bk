@@ -1,0 +1,7 @@
+/.cache
+/*.gpg
+/*.tar.gz
+/test
+/backup.sh
+/config.toml
+/go-site-bk

@@ -1,0 +1,29 @@
+[[site]]
+name = 'example'
+encrypt = 'my-gpg-password'
+
+[site.ssh]
+host = 'my-web-host'
+user = 'user'
+port = 444
+
+[site.rsync]
+www = '/var/www/html'
+exclude = ['wp-content/cache/*']
+
+[site.mysql]
+databases = ['wordpress']
+user = 'dbuser'
+pass = 'dbpass'
+
+[[site]]
+name = "site2"
+encrypt = 'my-gpg-password'
+
+[site.ssh]
+host = 'my-web-host'
+user = 'user'
+# defaults port to 22
+
+[site.rsync]
+www = '/var/www/html'
