@@ -12,13 +12,14 @@ import (
 func MakedirSiteCache(c *config.Config, siteIndex int) error {
 	folderPath := fmt.Sprintf(".cache/%s", c.Site[siteIndex].Name)
 	info, err := os.Stat(folderPath)
-	if info.IsDir() {
-		log.Fatal("Folder does not exist.")
+
+	if info != nil && !info.IsDir() {
+		return fmt.Errorf("Folder does not exist. %s", folderPath)
 	}
 
 	if os.IsNotExist(err) {
-		return runExecf(
-			"mkdir -p %s ||:",
+		runExecf(
+			"mkdir -p %s",
 			folderPath,
 		)
 	}

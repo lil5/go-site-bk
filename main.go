@@ -31,7 +31,7 @@ func checkMissingProg() error {
 	}
 
 	if len(missing) > 0 {
-		err = fmt.Errorf("Error: %s does not exist", strings.Join(missing, ", "))
+		err = fmt.Errorf("Error: [%s] does not exist", strings.Join(missing, ", "))
 	}
 
 	return err
@@ -62,27 +62,39 @@ func run() error {
 			continue
 		}
 
-		fmt.Printf("Site: %s", c.Site[siteIndex].Name)
+		fmt.Printf("Site: %s\n", c.Site[siteIndex].Name)
+
+		err := execute.MakedirSiteCache(c, siteIndex)
+		if err != nil {
+			return err
+		}
 
 		if allowed[siteIndex].Mysql {
+			fmt.Print("Mysql ...")
 			err = execute.BackupDatabase(c, siteIndex)
 
 			if err != nil {
 				return err
 			}
+			fmt.Println(" Done.")
 		}
+
 		if allowed[siteIndex].Rsync {
+			fmt.Print("Rsync ...")
 			err = execute.BackupFiles(c, siteIndex)
 
 			if err != nil {
 				return err
 			}
+			fmt.Println(" Done.")
 		}
 
+		fmt.Print("Tar Encrypt ...")
 		err = execute.TarEncrypt(c, siteIndex)
 		if err != nil {
 			return err
 		}
+		fmt.Print(" Done.\n\n")
 	}
 
 	return nil
@@ -103,7 +115,7 @@ func main() {
 			err := run()
 
 			if err != nil {
-				return cli.Exit(err, 1)
+				return cli.Exit(err, 2)
 			}
 			return nil
 		},
