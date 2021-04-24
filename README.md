@@ -13,13 +13,26 @@ This binary with create `bash` shells to run most commands.
 - rsync
 - ssh
 - tar
+- bash
 
 > :information_source: **MySQL backups**
 > MySQL or MariaDB backups require `mysqldump` on the webserver.
 
-## Setup
+## Install
 
-Copy `config-example.toml` to `config.toml` and change the values.
+Download the `bk-linux-amd64` (or the binary conforming with your PC) binary from the releases, move it to your desired location.
+
+## Usage
+
+:pencil2: Copy `config-example.toml` to `config.toml` and change the values.
+
+:zap: Run the binary from the location of the `config.toml`.
+
+:tea: Drink some green tea while waiting for the script to finish executing.
+
+:cloud: Copy the `archive-example-2021-04-04-130001.tar.gz.gpg` to your favourite untrusted cloud drive :speak_no_evil:.
+
+:heart: Star this project.
 
 ## Security
 
@@ -32,7 +45,7 @@ The encrypted archives can be safely move to any 3rd party cloud file hosting co
 To decrypt archives run:
 
 ```sh
-gpg -d folder.tar.gz.gpg | tar -xvzf -
+gpg -d archive-<site_name>-<datetime>.tar.gz.gpg | tar -xvzf -
 ```
 
 ## Links

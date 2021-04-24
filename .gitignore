@@ -1,3 +1,4 @@
+!.gitkeep
 /.cache
 /*.gpg
 /*.tar.gz
@@ -5,3 +6,4 @@
 /backup.sh
 /config.toml
 /go-site-bk
+/build/*
