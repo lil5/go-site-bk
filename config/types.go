@@ -6,6 +6,7 @@ type Config struct {
 type Site struct {
 	Name    string
 	Encrypt string
+	Local   bool
 	Ssh     Ssh
 	Rsync   Rsync
 	Mysql   Mysql

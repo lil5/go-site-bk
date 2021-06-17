@@ -27,3 +27,10 @@ user = 'user'
 
 [site.rsync]
 www = '/var/www/html'
+
+[[site]]
+name = 'local'
+encrypt = 'my-gpg-password'
+
+[site.rsync]
+www= "~/Finances"

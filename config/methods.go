@@ -8,7 +8,8 @@ import (
 )
 
 const (
-	ErrorMissing = "Missing site[%d]%s from config.toml"
+	ErrorMissing  = "Missing site[%d]%s from config.toml"
+	ErrorConflict = "Conflict in site[%d] between %s and %s in config.toml"
 )
 
 func GetConfig() (*Config, error) {
@@ -35,11 +36,20 @@ func CheckConfig(c *Config) ([]AllowedRuns, error) {
 		if c.Site[siteIndex].Name == "" {
 			err = fmt.Errorf(ErrorMissing, siteIndex, "name")
 		}
-		if c.Site[siteIndex].Ssh.Host == "" {
-			err = fmt.Errorf(ErrorMissing, siteIndex, "ssh.host")
-		}
-		if c.Site[siteIndex].Ssh.User == "" {
-			err = fmt.Errorf(ErrorMissing, siteIndex, "ssh.host")
+		if c.Site[siteIndex].Local {
+			if c.Site[siteIndex].Ssh.Host != "" {
+				err = fmt.Errorf(ErrorConflict, siteIndex, "ssh.host", "local")
+			}
+			if c.Site[siteIndex].Ssh.User != "" {
+				err = fmt.Errorf(ErrorConflict, siteIndex, "ssh.host", "local")
+			}
+		} else {
+			if c.Site[siteIndex].Ssh.Host == "" {
+				err = fmt.Errorf(ErrorMissing, siteIndex, "ssh.host")
+			}
+			if c.Site[siteIndex].Ssh.User == "" {
+				err = fmt.Errorf(ErrorMissing, siteIndex, "ssh.host")
+			}
 		}
 
 		if err != nil {

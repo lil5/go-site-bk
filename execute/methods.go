@@ -28,6 +28,18 @@ func MakedirSiteCache(c *config.Config, siteIndex int) error {
 }
 
 func BackupDatabase(c *config.Config, siteIndex int) error {
+	// backup local
+	if c.Site[siteIndex].Local {
+		return runExecf(
+			"mysqldump -u %s -p%s --databases %s > .cache/%s/db.sql",
+			c.Site[siteIndex].Mysql.User,
+			c.Site[siteIndex].Mysql.Pass,
+			strings.Join(c.Site[siteIndex].Mysql.Databases, " "),
+			c.Site[siteIndex].Name,
+		)
+	}
+
+	// backup with ssh
 	return runExecf(
 		"ssh %s@%s -p %d \"mysqldump -u %s -p%s --databases %s\" > .cache/%s/db.sql",
 		c.Site[siteIndex].Ssh.User,
@@ -51,6 +63,17 @@ func BackupFiles(c *config.Config, siteIndex int) error {
 		excludeStr += fmt.Sprintf(" --exclude='%s'", ex)
 	}
 
+	// backup local
+	if c.Site[siteIndex].Local {
+		return runExecf(
+			"rsync --progress -az --delete %s %s .cache/%s/",
+			excludeStr,
+			strings.TrimSuffix(c.Site[siteIndex].Rsync.Www, "/"),
+			c.Site[siteIndex].Name,
+		)
+	}
+
+	// backup with ssh
 	return runExecf(
 		"rsync --progress -az --delete -e \"ssh -p %d\"%s %s@%s:%s .cache/%s/",
 		c.Site[siteIndex].Ssh.Port,
