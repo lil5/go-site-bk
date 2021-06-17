@@ -37,7 +37,16 @@ func checkMissingProg() error {
 	return err
 }
 
-func run() error {
+func contains(arr []string, str string) bool {
+	for _, a := range arr {
+		if a == str {
+			return true
+		}
+	}
+	return false
+}
+
+func run(filterByName []string) error {
 	if runtime.GOOS == "windows" {
 		return fmt.Errorf("For now this program only works on unix systems")
 	}
@@ -59,6 +68,10 @@ func run() error {
 
 	for siteIndex := range c.Site {
 		if !allowed[siteIndex].Rsync && !allowed[siteIndex].Mysql {
+			continue
+		}
+
+		if len(filterByName) > 0 && !contains(filterByName, c.Site[siteIndex].Name) {
 			continue
 		}
 
@@ -104,6 +117,7 @@ func main() {
 	app := &cli.App{
 		Name:                 "Site Backup",
 		Usage:                "Create a config.toml and run",
+		ArgsUsage:            "A list of site names to filter what to sync",
 		EnableBashCompletion: true,
 		Authors: []*cli.Author{
 			{
@@ -112,7 +126,9 @@ func main() {
 			},
 		},
 		Action: func(c *cli.Context) error {
-			err := run()
+			argsArr := c.Args().Slice()
+
+			err := run(argsArr)
 
 			if err != nil {
 				return cli.Exit(err, 2)
