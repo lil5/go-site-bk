@@ -31,6 +31,7 @@ www = '/var/www/html'
 [[site]]
 name = 'local'
 encrypt = 'my-gpg-password'
+local = true
 
 [site.rsync]
 www= "~/Finances"
