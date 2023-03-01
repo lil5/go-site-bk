@@ -4,5 +4,5 @@ go 1.16
 
 require (
 	github.com/pelletier/go-toml v1.9.5
-	github.com/urfave/cli/v2 v2.24.2
+	github.com/urfave/cli/v2 v2.24.4
 )
